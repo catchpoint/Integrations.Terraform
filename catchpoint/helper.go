@@ -1075,3 +1075,28 @@ func isValidEmail(email string) bool {
 	// Use the MatchString method to check if the email matches the pattern
 	return regex.MatchString(email)
 }
+
+func getAlertSettingType(alertSettingType string) (int, string) {
+	alertSettingTypes := map[int]string{
+		1: "override",
+		2: "inherit & add"}
+	for id, alertSettingTypeString := range alertSettingTypes {
+		if alertSettingTypeString == alertSettingType {
+			return id, alertSettingTypeString
+		}
+	}
+	return 1, "override"
+}
+
+func getAlertSettingTypeName(alertSettingTypeId int) string {
+	alertSettingTypes := map[int]string{
+		0: "inherit",
+		1: "override",
+		2: "inherit & add"}
+	for id, alertSettingTypeString := range alertSettingTypes {
+		if id == alertSettingTypeId {
+			return alertSettingTypeString
+		}
+	}
+	return ""
+}

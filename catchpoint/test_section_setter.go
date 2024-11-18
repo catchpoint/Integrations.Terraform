@@ -242,6 +242,11 @@ func setScheduleSettings(testTypeId int, schedule_setting map[string]interface{}
 }
 
 func setAlertSettings(testTypeId int, alert_setting map[string]interface{}, testConfig *TestConfig) error {
+	var alert_setting_type string
+	if alert_setting["alert_setting_type"] != nil {
+		alert_setting_type = alert_setting["alert_setting_type"].(string)
+	}
+	alert_setting_type_id, alert_setting_type_value := getAlertSettingType(alert_setting_type)
 
 	alert_rule_list := alert_setting["alert_rule"].(*schema.Set).List()
 	for i := range alert_rule_list {
@@ -432,7 +437,7 @@ func setAlertSettings(testTypeId int, alert_setting map[string]interface{}, test
 		subject = subject + notification_group["subject"].(string)
 	}
 
-	testConfig.AlertSettingType = 1
+	testConfig.AlertSettingType = IdName{Id: alert_setting_type_id, Name: alert_setting_type_value}
 	testConfig.AlertWebhookIds = all_alert_webhook_ids
 	testConfig.AlertRecipientEmails = all_email_ids
 	testConfig.AlertContactGroups = all_contact_groups

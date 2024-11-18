@@ -214,8 +214,8 @@ type Test struct {
 }
 
 const (
-	rateLimit         = 7 // 7 requests per second
-	bucketSize        = 7 // same as rate limit
+	rateLimit       = 7 // 7 requests per second
+	bucketSize      = 7 // same as rate limit
 	requestInterval = time.Second / rateLimit
 )
 
@@ -472,7 +472,11 @@ func setTestAlertSettings(config *TestConfig) AlertGroupStruct {
 	recipients := []Recipient{}
 	alertWebhooks := []AlertWebhook{}
 
-	alertSettingType := GenericIdName{Id: config.AlertSettingType, Name: "Inherit"}
+	// alert setting type will  be inherit  if we not provide alert Settings block
+	alertSettingType := GenericIdName{Id: config.AlertSettingType.Id, Name: "inherit"}
+	if config.AlertSettingType.Name != "" {
+		alertSettingType = GenericIdName{Id: config.AlertSettingType.Id, Name: config.AlertSettingType.Name}
+	}
 
 	for i := range config.AlertRuleConfigs {
 		nodeThresholdType := GenericIdName{Id: config.AlertRuleConfigs[i].AlertNodeThresholdType.Id, Name: config.AlertRuleConfigs[i].AlertNodeThresholdType.Name}
